@@ -1,4 +1,4 @@
-name: Python CI/CD Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
@@ -13,89 +13,48 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
-      - name: Check out the repository
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      # Set up Python version
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
 
-      # Cache pip dependencies to speed up builds
-      - name: Cache pip dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
 
-      # Install dependencies
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Run Tests
+      run: |
+        source venv/bin/activate
+        pip install coverage
+        coverage run -m unittest discover
+        coverage report
+        coverage html -d coverage_html_report
 
-      # Lint the Python code using flake8
-      - name: Lint with flake8
-        run: |
-          source venv/bin/activate
-          pip install flake8
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-report
+        path: coverage_html_report
 
-      # Format code with black
-      - name: Format code with black
-        run: |
-          source venv/bin/activate
-          pip install black
-          black --check .
+    - name: Bandit Security Scan
+      run: |
+        source venv/bin/activate
+        pip install bandit
+        bandit -r .
 
-      # Run Bandit for security checks
-      - name: Run security checks with Bandit
-        run: |
-          source venv/bin/activate
-          pip install bandit
-          bandit -r .
+    - name: OWASP Dependency-Check
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y owasp-dependency-check
+        dependency-check --scan ./ --format "HTML" --out report.html
 
-      # Run unit tests with pytest and generate coverage report
-      - name: Run tests with pytest
-        run: |
-          source venv/bin/activate
-          pip install pytest pytest-cov
-          pytest --cov=./ --cov-report=xml
-
-      # Upload test coverage report to Codecov
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
-          fail_ci_if_error: true
-          verbose: true
-
-      # Optional: Send Slack notification on failure
-      - name: Notify Slack on failure
-        if: failure()
-        uses: 8398a7/action-slack@v3
-        with:
-          status: failure
-          author_name: 'GitHub Actions'
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-      # Optional: Save build artifacts
-      - name: Save build artifacts
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-artifacts
-          path: ./artifacts/
-
-      # Final step: Clean up virtual environment
-      - name: Clean up environment
-        run: |
-          deactivate
+    - name: Upload dependency-check report
+      uses: actions/upload-artifact@v2
+      with:
+        name: dependency-check-report
+        path: report.html
