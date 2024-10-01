@@ -14,14 +14,19 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3  # Atualize para a versão mais recente
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v3  # Atualize para a versão mais recente
+      uses: actions/setup-python@v3
       with:
         python-version: '3.8'
 
-    - name: Install dependencies
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libdbus-1-dev  # Instalar libdbus-1-dev
+
+    - name: Install Python dependencies
       run: |
         python -m venv venv
         source venv/bin/activate
@@ -36,7 +41,7 @@ jobs:
         coverage html -d coverage_html_report
 
     - name: Upload coverage report
-      uses: actions/upload-artifact@v3  # Atualize para a versão mais recente
+      uses: actions/upload-artifact@v3
       with:
         name: coverage-report
         path: coverage_html_report
@@ -54,7 +59,7 @@ jobs:
         dependency-check --scan ./ --format "HTML" --out report.html
 
     - name: Upload dependency-check report
-      uses: actions/upload-artifact@v3  # Atualize para a versão mais recente
+      uses: actions/upload-artifact@v3
       with:
         name: dependency-check-report
         path: report.html
