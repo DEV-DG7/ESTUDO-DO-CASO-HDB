@@ -24,7 +24,7 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libdbus-1-dev  # Instalar libdbus-1-dev
+        sudo apt-get install -y libdbus-1-dev
 
     - name: Install Python dependencies
       run: |
@@ -36,7 +36,8 @@ jobs:
       run: |
         source venv/bin/activate
         pip install coverage
-        coverage run -m unittest discover
+        # Descobre e executa os testes
+        coverage run --source=. -m unittest discover -s tests -p 'test_*.py'
         coverage report
         coverage html -d coverage_html_report
 
