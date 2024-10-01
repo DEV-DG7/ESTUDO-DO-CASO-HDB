@@ -14,10 +14,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3  # Atualize para a versão mais recente
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3  # Atualize para a versão mais recente
       with:
         python-version: '3.8'
 
@@ -25,7 +25,6 @@ jobs:
       run: |
         python -m venv venv
         source venv/bin/activate
-        pip install --upgrade pip  # Atualiza o pip
         pip install -r requirements.txt
 
     - name: Run Tests
@@ -37,7 +36,7 @@ jobs:
         coverage html -d coverage_html_report
 
     - name: Upload coverage report
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3  # Atualize para a versão mais recente
       with:
         name: coverage-report
         path: coverage_html_report
@@ -49,14 +48,13 @@ jobs:
         bandit -r .
 
     - name: OWASP Dependency-Check
-      uses: dependency-check/scan-action@v1
-      with:
-        project: "Task Manager"
-        format: "HTML"
-        outputDirectory: "./"
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y owasp-dependency-check
+        dependency-check --scan ./ --format "HTML" --out report.html
 
     - name: Upload dependency-check report
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3  # Atualize para a versão mais recente
       with:
         name: dependency-check-report
-        path: ./dependency-check-report.html
+        path: report.html
