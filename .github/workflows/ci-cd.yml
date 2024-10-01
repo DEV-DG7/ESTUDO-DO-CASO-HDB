@@ -25,6 +25,7 @@ jobs:
       run: |
         python -m venv venv
         source venv/bin/activate
+        pip install --upgrade pip  # Atualiza o pip
         pip install -r requirements.txt
 
     - name: Run Tests
@@ -48,13 +49,14 @@ jobs:
         bandit -r .
 
     - name: OWASP Dependency-Check
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y owasp-dependency-check
-        dependency-check --scan ./ --format "HTML" --out report.html
+      uses: dependency-check/scan-action@v1
+      with:
+        project: "Task Manager"
+        format: "HTML"
+        outputDirectory: "./"
 
     - name: Upload dependency-check report
       uses: actions/upload-artifact@v2
       with:
         name: dependency-check-report
-        path: report.html
+        path: ./dependency-check-report.html
