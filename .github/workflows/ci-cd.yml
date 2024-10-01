@@ -19,7 +19,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: '3.8'
+        python-version: '3.8'  # Ajustado para a versão correta usada no projeto
 
     - name: Install system dependencies
       run: |
@@ -30,6 +30,7 @@ jobs:
       run: |
         python -m venv venv
         source venv/bin/activate
+        pip install --upgrade pip
         pip install -r requirements.txt
 
     - name: Run Tests
@@ -51,13 +52,16 @@ jobs:
       run: |
         source venv/bin/activate
         pip install bandit
-        bandit -r .
+        # Usa o arquivo de configuração personalizado do Bandit
+        bandit -r . -c bandit.yaml
 
     - name: OWASP Dependency-Check
       run: |
         sudo apt-get update
-        sudo apt-get install -y owasp-dependency-check
-        dependency-check --scan ./ --format "HTML" --out report.html
+        # Instala o OWASP Dependency Check usando o método certo
+        curl -L https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.3/dependency-check-6.5.3-release.zip -o dependency-check.zip
+        unzip dependency-check.zip -d dependency-check
+        ./dependency-check/bin/dependency-check.sh --scan ./ --format "HTML" --out report.html
 
     - name: Upload dependency-check report
       uses: actions/upload-artifact@v3
