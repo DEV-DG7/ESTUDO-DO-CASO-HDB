@@ -4,8 +4,7 @@
 exclude_dirs:
   - tests  # Exclui a pasta de testes, que normalmente não é relevante para segurança
 
-# Removemos a opção de 'skips' para garantir que todas as verificações importantes sejam realizadas
-# Nenhuma verificação será ignorada
+# Nenhuma verificação será ignorada para garantir que todas as verificações importantes sejam realizadas
 
 severity: "HIGH"  # Somente alertas de alta severidade serão reportados
 confidence: "MEDIUM"  # Alertas com confiança média e alta serão reportados
@@ -13,7 +12,7 @@ confidence: "MEDIUM"  # Alertas com confiança média e alta serão reportados
 # Configuração de perfis robustos para incluir todas as checagens de alta prioridade
 profiles:
   robust_security:
-    include: 
+    include:
       - B101  # Uso de assert deve ser proibido em código de produção
       - B102  # Verifica se eval() é usado, que pode ser um risco
       - B201  # Uso inseguro de subprocess
@@ -26,3 +25,5 @@ profiles:
       - B404  # Uso de módulos HTTP perigosos como urllib ou urllib2
       - B603  # Verifica se subprocess.run ou subprocess.call é usado sem segurança
       - B608  # Verifica se credenciais estão em arquivos de configuração
+
+# Certifique-se de que o Bandit está rodando com este arquivo de configuração no GitHub Actions
