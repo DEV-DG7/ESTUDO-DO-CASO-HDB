@@ -1,0 +1,32 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y unzip
+        sudo apt-get install -y python3-apt
+
+    - name: Unzip dependency-check
+      run: |
+        wget <URL_DO_ARQUIVO_ZIP>
+        unzip dependency-check.zip -d dependency-check
+
+    - name: Run dependency check
+      run: |
+        cd dependency-check
+        ./dependency-check/bin/dependency-check.sh
