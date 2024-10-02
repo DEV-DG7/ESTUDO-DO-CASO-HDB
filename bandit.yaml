@@ -25,5 +25,3 @@ profiles:
       - B404  # Uso de módulos HTTP perigosos como urllib ou urllib2
       - B603  # Verifica se subprocess.run ou subprocess.call é usado sem segurança
       - B608  # Verifica se credenciais estão em arquivos de configuração
-
-# Certifique-se de que o Bandit está rodando com este arquivo de configuração no GitHub Actions
