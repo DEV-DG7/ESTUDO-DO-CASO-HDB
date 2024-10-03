@@ -1,0 +1,1 @@
+{"coordinates":"pkg:npm/side-channel@1.0.6","description":"Store information about any JS value in a side channel. Uses WeakMap if available.","reference":"https://ossindex.sonatype.org/component/pkg:npm/side-channel@1.0.6?utm_source\u003ddependency-check\u0026utm_medium\u003dintegration\u0026utm_content\u003d10.0.4","vulnerabilities":[],"sonatypeOssiScore":0.0}

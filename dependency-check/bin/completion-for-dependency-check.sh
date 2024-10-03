@@ -19,13 +19,6 @@ _odc_completions()
             --bundleAuditWorkingDirectory
         -c --connectiontimeout
             --connectionString
-            --cveUrlBase
-            --cveUrlModified
-            --cveValidForHours <hours>
-            --cveStartYear <year>
-            --cveUser <user>
-            --cvePassword <password>
-            --cveDownloadWait <milliseconds>
         -d --data
             --dbDriverName
             --dbDriverPath
@@ -39,11 +32,15 @@ _odc_completions()
             --disableCentralCache
             --disableCmake
             --disableCocoapodsAnalyzer
+            --disableCarthageAnalyzer
             --disableComposer
+            --disableDart
             --disableFileName
             --disableGolangDep
             --disableGolangMod
+            --disableHostedSuppressions
             --disableJar
+            --disableMavenInstall
             --disableMixAudit
             --disableMSBuild
             --disableYarnAudit
@@ -56,6 +53,9 @@ _odc_completions()
             --disableOpenSSL
             --disableOssIndex
             --disableOssIndexCache
+            --ossIndexRemoteErrorWarnOnly
+            --disableKnownExploited
+            --kevURL <url>
             --disablePip
             --disablePipfile
             --disablePyDist
@@ -75,6 +75,9 @@ _odc_completions()
             --go
         -h --help
             --hints
+            --hostedSuppressionsForceUpdate
+            --hostedSuppressionsValidForHours <hours>
+            --hostedSuppressionsUrl <url>
             --junitFailOnCVSS <score>
         -l --log
         -n --noupdate
@@ -85,6 +88,12 @@ _odc_completions()
             --nodeAuditSkipDevDependencies
             --nodePackageSkipDevDependencies
             --nonProxyHosts <list>
+            --nvdApiKey <apiKey>
+            --nvdDatafeed <url>
+            --nvdUser <user>
+            --nvdPassword <password>
+            --nvdApiDelay <ms>
+            --nvdValidForHours <hours>
         -o --out
             --ossIndexPassword <password>
             --ossIndexUsername <username>
