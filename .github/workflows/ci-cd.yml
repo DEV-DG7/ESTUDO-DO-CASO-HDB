@@ -51,10 +51,10 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y owasp-dependency-check
-        dependency-check --scan ./ --format "HTML" --out report.html
+        dependency-check --scan ./ --format "HTML" --out dependency-check-report.html
 
     - name: Upload dependency-check report
       uses: actions/upload-artifact@v4
       with:
         name: dependency-check-report
-        path: report.html
+        path: dependency-check-report.html

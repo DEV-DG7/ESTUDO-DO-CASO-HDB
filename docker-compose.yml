@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   web:
     build: .
     ports:
       - '5000:5000'
     environment:
-      - DATABASE_URL=sqlite:///delivery.db
+      - DATABASE_URL=sqlite:///task_manager.db
       - SECRET_KEY=sua_chave_secreta
     volumes:
       - .:/app
@@ -16,7 +14,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml  # Verifique se este caminho está correto
 
   grafana:
     image: grafana/grafana

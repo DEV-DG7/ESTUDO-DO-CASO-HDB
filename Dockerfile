@@ -1,20 +1,26 @@
-# Use uma imagem base do Python
-FROM python:3.9-slim
+# Use a imagem python:3.8-slim
+FROM python:3.8-slim
 
-# Defina o diretório de trabalho
+# Definir o diretório de trabalho
 WORKDIR /app
 
-# Copie os arquivos de requisitos
+# Instalar dependências do sistema necessárias para compilar pacotes
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libdbus-1-dev \
+    libdbus-glib-1-dev \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar o arquivo de requisitos
 COPY requirements.txt .
 
-# Instale as dependências
-RUN pip install --no-cache-dir -r requirements.txt
+# Instalar as dependências do Python
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copie o restante do código
+# Copiar o restante do código
 COPY . .
 
-# Instale o OWASP Dependency-Check
-RUN apt-get update && apt-get install -y owasp-dependency-check
-
-# Comando para rodar os testes e análises
-CMD ["sh", "-c", "python -m unittest discover && bandit -r . && dependency-check --scan ./ --format HTML --out report.html"]
+# Comando para rodar a aplicação
+CMD ["python", "run.py"]  # Atualizado para o arquivo correto de execução
