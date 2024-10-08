@@ -23,9 +23,17 @@ jobs:
 
     - name: Install dependencies
       run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-pip python3-setuptools python3-wheel meson ninja-build
         python -m venv venv
         source venv/bin/activate
         pip install -r requirements.txt
+
+    - name: Run Meson build
+      run: |
+        source venv/bin/activate
+        meson setup build
+        ninja -C build
 
     - name: Run Tests
       run: |
@@ -36,7 +44,7 @@ jobs:
         coverage html -d coverage_html_report
 
     - name: Upload coverage report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v2
       with:
         name: coverage-report
         path: coverage_html_report
@@ -54,7 +62,7 @@ jobs:
         dependency-check --scan ./ --format "HTML" --out dependency-check-report.html
 
     - name: Upload dependency-check report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v2
       with:
         name: dependency-check-report
         path: dependency-check-report.html
