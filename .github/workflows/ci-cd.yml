@@ -14,18 +14,27 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.8'
 
     - name: Install dependencies
       run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-pip python3-setuptools python3-wheel meson ninja-build libdbus-1-dev
         python -m venv venv
         source venv/bin/activate
         pip install -r requirements.txt
+
+    - name: Run Meson build
+      run: |
+        source venv/bin/activate
+        export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig
+        meson setup build
+        ninja -C build
 
     - name: Run Tests
       run: |
