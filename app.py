@@ -25,7 +25,7 @@ def load_user(user_id):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username')
+        username = request.form.get('DEV-DG7')
 
         if not username:
             logging.warning('Tentativa de login sem fornecer username')
@@ -55,6 +55,14 @@ def logout():
     logout_user()
     logging.info('Usuário deslogado')
     return redirect(url_for('login'))
+
+@app.route('/api/test')
+def test_api():
+    return 'API está funcionando!', 200
+
+def create_app():
+    """Função que cria e retorna a aplicação Flask"""
+    return app
 
 if __name__ == "__main__":
     app.run(debug=True, host='127.0.0.1', port=5000)
