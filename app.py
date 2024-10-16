@@ -4,28 +4,36 @@ from flask_login import LoginManager, login_required, login_user, logout_user, U
 import logging
 import sys
 
+# Inicializa a aplicação Flask
 app = Flask(__name__)
 
+# Configuração da chave secreta
 app.secret_key = os.environ.get('SECRET_KEY', 'minha-chave-secreta')
 
+# Configuração do gerenciador de login
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+# Configuração de logging
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
+# Definição da classe de usuário
 class User(UserMixin):
     def __init__(self, id):
         self.id = id
 
+# Função de callback para carregar usuário
 @login_manager.user_loader
 def load_user(user_id):
     return User(user_id)
 
+# Rota de login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('DEV-DG7')
+        # Obtém o nome de usuário do formulário
+        username = request.form.get('username')
 
         if not username:
             logging.warning('Tentativa de login sem fornecer username')
@@ -44,11 +52,13 @@ def login():
 
     return render_template('login.html')
 
+# Rota protegida para as tarefas
 @app.route('/tasks')
 @login_required
 def tasks():
     return 'Aqui estão suas tarefas'
 
+# Rota de logout
 @app.route('/logout')
 @login_required
 def logout():
@@ -56,13 +66,20 @@ def logout():
     logging.info('Usuário deslogado')
     return redirect(url_for('login'))
 
+# Rota da API de teste
 @app.route('/api/test')
 def test_api():
     return 'API está funcionando!', 200
 
+# Nova rota adicionada para a página inicial
+@app.route('/')
+def home():
+    return "Hello, World!"
+
+# Função para criar a aplicação Flask
 def create_app():
-    """Função que cria e retorna a aplicação Flask"""
     return app
 
+# Execução da aplicação
 if __name__ == "__main__":
     app.run(debug=True, host='127.0.0.1', port=5000)
