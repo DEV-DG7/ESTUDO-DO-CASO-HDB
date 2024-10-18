@@ -58,7 +58,17 @@ class TestExample(unittest.TestCase):
         response = self.app.get('/api/test')
         self.assertEqual(response.data.decode('utf-8'), 'API está funcionando!')
 
-    # Testes para o arquivo run.py para garantir 100% de cobertura
+    # Testes para garantir 100% de cobertura no start_app
+    def test_start_app_valid(self):
+        """Teste do start_app com uma configuração válida."""
+        os.environ['FLASK_RUN_PORT'] = '5000'
+        os.environ['FLASK_RUN_HOST'] = '127.0.0.1'
+        os.environ['FLASK_DEBUG'] = 'False'
+        
+        # Mocka a função app.run para não rodar o servidor de verdade
+        with unittest.mock.patch('flask.Flask.run', return_value=None):
+            start_app()  # Não deve levantar exceções
+
     def test_start_app_invalid_port(self):
         """Teste do start_app com uma porta inválida."""
         with self.assertRaises(ValueError):
@@ -71,27 +81,15 @@ class TestExample(unittest.TestCase):
             os.environ['FLASK_RUN_HOST'] = ''  # Simula erro de host inválido
             start_app()
 
-    def test_start_app_valid_config(self):
-        """Teste do start_app com uma configuração válida."""
-        os.environ['FLASK_RUN_PORT'] = '5000'
-        os.environ['FLASK_RUN_HOST'] = '127.0.0.1'
-        os.environ['FLASK_DEBUG'] = 'False'
-
-        try:
-            start_app()  # Não deve gerar nenhuma exceção
-        except Exception as e:
-            self.fail(f"start_app levantou uma exceção inesperada: {e}")
-
     def test_start_app_default_port(self):
         """Teste do start_app com a porta padrão."""
         if 'FLASK_RUN_PORT' in os.environ:
             del os.environ['FLASK_RUN_PORT']
         os.environ['FLASK_RUN_HOST'] = '127.0.0.1'
 
-        try:
+        # Mocka a função app.run para garantir que a linha seja coberta sem executar o servidor
+        with unittest.mock.patch('flask.Flask.run', return_value=None):
             start_app()  # Deve rodar na porta padrão (5000)
-        except Exception as e:
-            self.fail(f"start_app levantou uma exceção inesperada: {e}")
 
     def test_start_app_general_exception(self):
         """Teste que simula uma exceção geral ao iniciar a aplicação."""

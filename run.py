@@ -41,4 +41,4 @@ def start_app():
 
 # Verificação de ambiente para rodar a aplicação
 if __name__ == "__main__":
-    start_app()
+    start_app()  # Chama a função que estamos testando
