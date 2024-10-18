@@ -14,10 +14,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4  # Atualizado para a versão v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4  # Atualizado para a versão v4
       with:
         python-version: '3.8'
 
@@ -54,7 +54,7 @@ jobs:
         coverage html -d coverage_html_report
 
     - name: Upload Coverage Report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4  # Atualizado para a versão v4
       with:
         name: coverage-report
         path: coverage_html_report
@@ -67,16 +67,16 @@ jobs:
 
     - name: Install OWASP Dependency-Check
       run: |
-        wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.3/dependency-check-6.5.3-release.zip -O dependency-check.zip
+        wget https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.0/dependency-check-8.4.0-release.zip -O dependency-check.zip
         unzip dependency-check.zip -d dependency-check
         export PATH=$PATH:$(pwd)/dependency-check/bin
 
     - name: OWASP Dependency-Check Scan
       run: |
-        dependency-check/bin/dependency-check.sh --scan ./ --format "HTML" --out dependency-check-report.html
+        dependency-check/bin/dependency-check.sh --purge --scan ./ --format "HTML" --out dependency-check-report.html  # Comando atualizado com a flag --purge
 
     - name: Upload Dependency-Check Report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4  # Atualizado para a versão v4
       with:
         name: dependency-check-report
         path: dependency-check-report.html
