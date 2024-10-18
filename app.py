@@ -1,8 +1,8 @@
 import os
-from flask import Flask, redirect, url_for, request, flash, render_template
-from flask_login import LoginManager, login_required, login_user, logout_user, UserMixin
 import logging
 import sys
+from flask import Flask, redirect, url_for, request, flash, render_template
+from flask_login import LoginManager, login_required, login_user, logout_user, UserMixin
 
 # Inicializa a aplicação Flask
 app = Flask(__name__)
@@ -32,13 +32,12 @@ def load_user(user_id):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # Obtém o nome de usuário do formulário
         username = request.form.get('username')
 
         if not username:
             logging.warning('Tentativa de login sem fornecer username')
             flash('Username é obrigatório!', 'warning')
-            return redirect(url_for('login'))
+            return redirect(url_for('login'))  # Redireciona em vez de renderizar
 
         if username == 'admin':
             user = User(id=1)
@@ -48,9 +47,9 @@ def login():
         else:
             logging.warning(f'Falha de login para o usuário: {username}')
             flash('Falha no login. Usuário incorreto!', 'danger')
-            return redirect(url_for('login'))
+            return redirect(url_for('login'))  # Redireciona em vez de renderizar
 
-    return render_template('login.html')
+    return render_template('login.html')  # Renderiza a página de login inicialmente
 
 # Rota protegida para as tarefas
 @app.route('/tasks')
@@ -75,6 +74,11 @@ def test_api():
 @app.route('/')
 def home():
     return "Hello, World!"
+
+# Rota de adição
+@app.route('/add/<int:num1>/<int:num2>')
+def add(num1, num2):
+    return str(num1 + num2)
 
 # Função para criar a aplicação Flask
 def create_app():

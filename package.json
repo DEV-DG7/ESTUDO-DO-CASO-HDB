@@ -2,15 +2,13 @@
   "name": "task_manager_clone",
   "version": "1.0.0",
   "description": "A task manager application clone",
-  "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
+  "main": "app.js",
   "scripts": {
-    "test": "mocha tests/**/*.js",
     "build": "webpack --config webpack.config.js",
+    "coverage": "nyc npm test",
+    "dev": "nodemon app.js",
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "test": "mocha tests/**/*.js"
   },
   "keywords": [
     "task",
@@ -19,19 +17,39 @@
   ],
   "author": "Seu Nome",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seu-usuario/task_manager_clone.git"
+  },
+  "homepage": "https://github.com/seu-usuario/task_manager_clone#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.21.0",
+    "express": "^4.21.1",
     "helmet": "^8.0.0",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.7",
-    "@babel/preset-env": "^7.25.7",
+    "@babel/core": "^7.25.8",
+    "@babel/preset-env": "^7.25.8",
     "babel-loader": "^9.2.1",
-    "mocha": "^10.2.0",
+    "mocha": "^10.7.3",
     "nodemon": "^3.1.7",
+    "nyc": "^17.1.0",
     "webpack": "^5.76.0",
-    "webpack-cli": "^4.10.0"
+    "webpack-cli": "^5.1.4"
+  },
+  "nyc": {
+    "include": [
+      "app.js",
+      "routes/**/*.js"
+    ],
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "extension": [
+      ".js"
+    ],
+    "all": true
   }
 }
